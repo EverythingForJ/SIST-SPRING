@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="sPrinter" class="com.example.StringPrinter" />
+	<bean id="cPrinter" class="com.example.ConsolePrinter" />
+	
+	<bean id="hello" class="com.example.Hello">
+		<constructor-arg name="name" type="String" value="김지민" />
+		<constructor-arg ref="sPrinter" />
+		<!-- <property name="name" value="한지민" />
+		<property name="printer" ref="sPrinter" /> -->
+	</bean>
+	
+</beans>
