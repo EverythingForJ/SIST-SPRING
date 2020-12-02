@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="chulsu" class="com.example.StudentVO">
+		<property name="hakbun" value="2020-01" />
+		<property name="name" value="한지민" />
+		<property name="kor">
+			<value>89</value>
+		</property>
+		<property name="eng" value="100" />
+		<property name="mat" value="77" />
+	</bean>
+	<bean id="younghee" class="com.example.StudentVO">
+		<property name="hakbun" value="2020-02" />
+		<property name="name" value="박지민" />
+		<property name="kor">
+			<value>100</value>
+		</property>
+		<property name="eng" value="99" />
+		<property name="mat" value="83" />
+	</bean>
+	
+	<bean id="myCalculator" class="com.example.Calculator">
+		<property name="student" ref="chulsu"></property>
+	</bean>
+</beans>
