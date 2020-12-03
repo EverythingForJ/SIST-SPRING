@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+<!-- 첫번째방법 -->
+<!-- 	<context:annotation-config/> -->
+<!-- 두번째방법 -->	
+<!-- <bean class="org.springframework.context.annotation.CommonAnnotationBeanPostProcessor" />
+-->	
+ 	<!-- 세번째방법 -->
+ 	<bean id="student" class="com.example.Student"
+ 	init-method="initMethod" destroy-method="destroyMethod">
+		<constructor-arg value="한지민" />
+		<constructor-arg value="25" />
+		<constructor-arg value="여성" />
+		<constructor-arg value="서울" />
+	</bean>
+
+</beans>
