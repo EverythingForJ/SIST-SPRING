@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		" http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.vo.UserVO">
+
+
+	<resultMap id="userVOResult" type="userVO">
+		<result property="userId" column="userid" />
+		<result property="name" column="name" />
+		<result property="gender" column="gender" />
+		<result property="city" column="city" />
+	</resultMap>
+	<select id="select" parameterType="String" resultType="userVO"
+		resultMap="userVOResult">
+		SELECT * FROM USERS WHERE userid = #{id}
+	</select>
+
+	<insert id="insert" parameterType="userVO">
+		INSERT INTO USERS(userid,
+		name, gender, city)
+		VALUES (#{userId}, #{name}, #{gender}, #{city})
+	</insert>
+	<select id="selectAll" resultType="userVO"
+		resultMap="userVOResult">
+		SELECT * FROM USERS
+	</select>
+
+	<update id="update" parameterType="userVO">
+		UPDATE USERS SET name =
+		#{name}, gender = #{gender}, city = #{city}
+		WHERE userid = #{userId}
+	</update>
+
+	<delete id="delete" parameterType="String">
+		DELETE FROM USERS WHERE userid = #{id}
+	</delete>
+
+</mapper>
