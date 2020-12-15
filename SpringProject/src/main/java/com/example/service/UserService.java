@@ -7,8 +7,8 @@ import com.example.vo.UserVO;
 public interface UserService {
 	void create(UserVO userVO);
 	UserVO read(String userid);
-	List<UserVO>readAll();
+	List<UserVO> readAll();
 	void update(UserVO userVO);
 	void delete(String userid);
-	int login(String userid,String passwd);
+	int login(String userid, String passwd);
 }

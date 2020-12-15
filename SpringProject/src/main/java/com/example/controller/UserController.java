@@ -1,8 +1,10 @@
 package com.example.controller;
 
 import java.util.HashMap;
-import java.util.Locale;
+import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,54 +23,38 @@ import lombok.extern.java.Log;
 
 @Controller
 @Log
+@RequestMapping("/membership")
 public class UserController {
 	@Autowired
 	private UserService userService;
-	
-	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String home(Locale locale, Model model) {
-		return "index"; // WEB-INF/views/index.jsp
-	}
-	
-	@RequestMapping(value="/register", method=RequestMethod.POST)
+
+	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public String register(UserVO userVO) {
 		//log.info(userVO.toString());
 		this.userService.create(userVO);
 		return "redirect:/";
 	}
 	
-	@RequestMapping(value = "/select/{userid}", method=RequestMethod.GET)
-	public void select(@PathVariable String userid) {
-		// log.info("userid = "+userid);
-		UserVO userVO = this.userService.read(userid);
-		log.info("찾은 유저 = "+userVO.toString());
-	}
-	
-	@RequestMapping(value = "/login", method=RequestMethod.GET)
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String login() {
-		return "login"; //WEB-INF/wiews/login.jsp
+		return "membership/login";       //WEB-INF/views/membership/login.jsp
 	}
 	
-	@RequestMapping(value = "/login", method=RequestMethod.POST)
-	public ModelAndView login1(@RequestParam("userid") String userid,
-							@RequestParam("passwd") String passwd) {
-		//log.info("userid = "+userid);
-		//log.info("passwd = "+passwd);
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	public String login1(@RequestParam("userid") String userid, 
+			                     @RequestParam("passwd") String passwd,
+			                     HttpSession session) throws Exception{
 		int result = this.userService.login(userid, passwd);
-		// log.info("result = " + result);
-		// -1 : 그런 계정 없다. 0 : 비밀번호 불일치 1 : 모두 성공
-		ModelAndView mav = new ModelAndView();
-		mav.addObject("result", result);
-		
-		// login에 성공하면 userid를 가지고 해당 유저의 정보를 가져오자.
-		UserVO userVO = null;
-		if(result==1) {
-			userVO = this.userService.read(userid);
-			mav.addObject("userInfo", userVO);
+		//result : -1, 0, 1
+		String page = null;
+		if(result == -1) throw new Exception("존재하지 않는 아이디 입니다.");
+		else if(result == 0) throw new Exception("비밀번호가 일치하지 않습니다.");
+		else {
+			UserVO userVO = this.userService.read(userid);
+			session.setAttribute("userInfo", userVO);
+			page = "redirect:/";
 		}
-		
-		mav.setViewName("loginresult"); // WEB-INF/views/
-		return mav;
+		return page;
 	}
 	
 	@RequestMapping(value="/idcheck/{userid}", method = RequestMethod.POST)
@@ -83,4 +69,43 @@ public class UserController {
 		else map.put("result", false);   //사용할 수 없음.
 		return map;
 	}
+	
+	@RequestMapping(value="/logout", method = RequestMethod.GET)
+	public String logout(HttpSession session, Model model) {
+		UserVO userVO = (UserVO)session.getAttribute("userInfo");
+		session.invalidate();
+		model.addAttribute("username", userVO.getName());
+		return "membership/logout";      //WEB-INF/views/membership/logout.jsp
+	}
+	
+	@RequestMapping(value="/admin", method = RequestMethod.GET)
+	public String admin(Model model) {
+		List<UserVO> list = this.userService.readAll();
+		model.addAttribute("userlist", list);
+		return "membership/admin";           //WEB-INF/views/membership/admin.jsp
+	}
+	
+	@RequestMapping(value="/delete", method = RequestMethod.GET)
+	public String delete(HttpSession session) {
+		UserVO userVO = (UserVO)session.getAttribute("userInfo");
+		session.invalidate();
+		this.userService.delete(userVO.getUserid());
+		return "redirect:/";
+	}
+	
+	
+	@RequestMapping(value="/userinfo", method = RequestMethod.GET)
+	public String userinfo() {
+		return "membership/userinfo";         //WEB-INF/views/membership/userinfo.jsp
+	}
+	
+	@RequestMapping(value="/update/{age}", method = RequestMethod.GET)
+	public String update(@PathVariable int age, HttpSession session) {
+		UserVO userVO = (UserVO)session.getAttribute("userInfo");
+		userVO.setAge(age);
+		this.userService.update(userVO);
+		return "redirect:/membership/userinfo";
+	}
+	
+	
 }

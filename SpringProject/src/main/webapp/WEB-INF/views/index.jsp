@@ -15,7 +15,27 @@
 			location.href = "static/register.html";
 		});
 		$('#btnLogin').on('click', function(){
-			location.href = "/login";
+			location.href = "/membership/login";
+		});
+		$('#btnLogout').on('click', function(){
+			if(confirm("정말 로그아웃하시겠습니까 ? ")){
+				location.replace("/membership/logout");
+			}else{
+				history.go(0);
+			}
+		});
+		$('#btnAdmin').on('click', function(){
+			location.replace("/membership/admin");
+		});
+		$('#btnDelete').on('click', function(){
+			if(confirm("정말 탈퇴하시겠습니까 ? ")){
+				location.replace("/membership/delete");
+			}else{
+				history.go(0);
+			}
+		});
+		$('#btnMyservice').on('click', function(){
+			location.replace('/membership/userinfo');
 		});
 	});
 </script>
@@ -52,7 +72,7 @@
         			<button id="btnDelete" class="btn btn-danger btn-lg">회원탈퇴</button>
         		</c:if>
         		<c:if test="${user.flag eq 0}">   <%--관리자라면 --%>
-        			<a class="btn btn-primary btn-lg" href="admin.jsp" role="button">관리자 페이지로</a>
+        			<button id="btnAdmin" class="btn btn-primary btn-lg">관리자 페이지로</button>
         		</c:if>
         	</c:if>
         </p>

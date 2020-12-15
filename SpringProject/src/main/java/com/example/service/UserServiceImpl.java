@@ -5,13 +5,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.dao.UserDaoImpl;
+import com.example.dao.UserDao;
 import com.example.vo.UserVO;
 
 @Service("userService")
 public class UserServiceImpl implements UserService {
 	@Autowired
-	private UserDaoImpl userDao;
+	private UserDao userDao;
 
 	@Override
 	public void create(UserVO userVO) {
@@ -42,6 +42,5 @@ public class UserServiceImpl implements UserService {
 	public int login(String userid, String passwd) {
 		return this.userDao.loginUser(userid, passwd);
 	}
-	
-	
+
 }
