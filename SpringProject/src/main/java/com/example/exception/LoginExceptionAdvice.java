@@ -12,11 +12,19 @@ public class LoginExceptionAdvice {
 	private static final Logger logger = 
 			LoggerFactory.getLogger(LoginExceptionAdvice.class);
 	
-	@ExceptionHandler(Exception.class)
-	public String except(Exception ex, Model model) {
+	@ExceptionHandler(LoginException.class)
+	public String loginExcept(Exception ex, Model model) {
 		logger.error("Exception ........ " + ex.getMessage());
 		model.addAttribute("exception", ex.getMessage());
 		logger.error(model.toString());
 		return "membership/error";     //WEB-INF/views/membership/error.jsp
+	}
+	
+	@ExceptionHandler(BbsException.class)
+	public String bbsExcept(Exception ex, Model model) {
+		logger.error("Exception ........ " + ex.getMessage());
+		model.addAttribute("exception", ex.getMessage());
+		logger.error(model.toString());
+		return "/bbs/error";     //WEB-INF/views/bbs/error.jsp
 	}
 }

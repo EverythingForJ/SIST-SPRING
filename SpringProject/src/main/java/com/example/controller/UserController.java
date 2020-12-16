@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.security.auth.login.LoginException;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.example.service.UserService;
 import com.example.vo.UserVO;
@@ -28,8 +28,12 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
+	@RequestMapping(value = "/register", method = RequestMethod.GET)
+	public String register() {
+		return "/membership/register";   //WEB-INF/views/membership/register.jsp
+	}
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public String register(UserVO userVO) {
+	public String register1(UserVO userVO) {
 		//log.info(userVO.toString());
 		this.userService.create(userVO);
 		return "redirect:/";
@@ -43,12 +47,12 @@ public class UserController {
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public String login1(@RequestParam("userid") String userid, 
 			                     @RequestParam("passwd") String passwd,
-			                     HttpSession session) throws Exception{
+			                     HttpSession session) throws LoginException{
 		int result = this.userService.login(userid, passwd);
 		//result : -1, 0, 1
 		String page = null;
-		if(result == -1) throw new Exception("존재하지 않는 아이디 입니다.");
-		else if(result == 0) throw new Exception("비밀번호가 일치하지 않습니다.");
+		if(result == -1) throw new LoginException("존재하지 않는 아이디 입니다.");
+		else if(result == 0) throw new LoginException("비밀번호가 일치하지 않습니다.");
 		else {
 			UserVO userVO = this.userService.read(userid);
 			session.setAttribute("userInfo", userVO);
