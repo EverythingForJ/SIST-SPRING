@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-5.4.xsd">
+
+	<security:http auto-config="true" use-expressions="true">
+		<security:intercept-url pattern="/login"
+			access="permitAll" />
+		<security:intercept-url pattern="resources/**"
+			access="permitAll" />
+		<security:intercept-url pattern="/**"
+			access="hasRole('ROLE_USER')" />
+		<security:form-login login-page="/login"
+			default-target-url="/welcome" username-parameter="j_username"
+			password-parameter="j_password"
+			authentication-failure-url="/login?error"
+			login-processing-url="/j_spring_security_check"
+			always-use-default-target="true" />
+		<security:logout invalidate-session="true"
+			logout-url="/logout" logout-success-url="/login?logout" />
+		<security:csrf />
+	</security:http>
+
+	<security:authentication-manager>
+		<security:authentication-provider
+			user-service-ref="memberService" />
+	</security:authentication-manager>
+
+	<!-- <bean id="memberService" class="com.example.service.MemberService">
+		<property name="userService" ref="userService" />
+	</bean>
+	<bean id="userService" class="com.example.service.UserService">
+		<property name="userDao" ref="userDao" />
+	</bean>
+	<bean id="userDao" class="com.example.dao.UserDao">
+		<property name="username" value="{noop}javaexpert" />
+		<property name="password" value="{noop}12345678" />
+	</bean> -->
+	
+</beans>
