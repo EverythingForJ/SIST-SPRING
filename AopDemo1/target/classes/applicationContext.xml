@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
+
+	<bean id="tomdog" class="com.example.TomDog" />
+	<aop:config>
+		<aop:aspect ref="animalAOP">
+			<aop:pointcut id="greeting"
+				expression="execution(public * com.example.Animal.walwal(..))" />
+			<aop:before pointcut-ref="greeting" method="beforeWalwal" />
+			<aop:after-returning pointcut-ref="greeting"
+				method="afterWalwal" />
+		</aop:aspect>
+	</aop:config>
+	<bean id="animalAOP" class="com.example.AnimalAOP" />
+
+</beans>
